@@ -112,7 +112,7 @@ export default class Notes extends Component {
       <View style={styles.container}>
         <ListView
           dataSource={this.state.dataSource}
-          render={this.renderRow}
+          renderRow={this.renderRow}
           renderHeader={() => <Badge userInfo={this.props.userInfo} />} >
         </ListView>
         {this.footer()}
