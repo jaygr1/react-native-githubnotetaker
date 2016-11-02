@@ -63,7 +63,7 @@ export default class Dashboard extends Component {
           title: 'Repos',
           passProps: {
             userInfo: this.props.userInfo,
-            
+            repos: res
           }
         })
       })
