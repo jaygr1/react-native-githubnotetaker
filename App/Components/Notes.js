@@ -44,8 +44,8 @@ var styles = StyleSheet.create({
 });
 
 export default class Notes extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       dataSource: ds.cloneWithRows(this.props.notes),
@@ -60,66 +60,64 @@ export default class Notes extends Component {
     })
   }
 
-  handleSubmit() {
-    var note = this.state.note
-    this.setState({
-      note: ''
-    })
-    api.addNote(this.props.userInfo.login, note)
-      .then((data) => {
-        api.getNotes(this.props.userInfo.login)
-          .then((data) => {
-            this.setState({
-              dataSource: this.ds.cloneWithRows(data)
-            })
-          })
-      }).catch((err) => {
-        console.log('Request failed', err)
-        this.setState({error})
-      })
-  }
-
-  footer() {
-    return (
-      <View style={styles.footerContainer}>
-        <TextInput
-          style={styles.searchInput}
-          value={this.state.note}
-          onChange={this.handleChange.bind(this)}
-          placeholder='New Note' />
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.handleSubmit.bind(this)}
-          underlayColor="#88D4F5" />
-          <Text style={styles.buttonText}> Submit </Text>
-      </View>
-    )
-  }
-
-  renderRow(rowData) {
-    return (
-      <View>
-        <View style={styles.rowContainer} >
-          <Text> {rowData} </Text>
-        </View>
-        <Separator />
-      </View>
-    )
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this.renderRow}
-          renderHeader={() => <Badge userInfo={this.props.userInfo} />} >
-        </ListView>
-        {this.footer()}
-      </View>
-    )
-  }
-}
+  handleSubmit(){
+   var note = this.state.note;
+   this.setState({
+     note: ''
+   });
+   api.addNote(this.props.userInfo.login, note)
+     .then((data) => {
+       api.getNotes(this.props.userInfo.login)
+         .then((data) => {
+           this.setState({
+             dataSource: this.ds.cloneWithRows(data)
+           })
+         });
+     })
+     .catch((error) => {
+       console.log('Request failed', error);
+       this.setState({error})
+     });
+ }
+ renderRow(rowData){
+   return (
+     <View>
+       <View style={styles.rowContainer}>
+         <Text> {rowData} </Text>
+       </View>
+       <Separator />
+     </View>
+   )
+ }
+ footer(){
+   return (
+     <View style={styles.footerContainer}>
+       <TextInput
+           style={styles.searchInput}
+           value={this.state.note}
+           onChange={this.handleChange.bind(this)}
+           placeholder="New Note" />
+       <TouchableHighlight
+           style={styles.button}
+           onPress={this.handleSubmit.bind(this)}
+           underlayColor="#88D4F5">
+             <Text style={styles.buttonText}>Submit</Text>
+         </TouchableHighlight>
+     </View>
+   )
+ }
+ render(){
+   return (
+     <View style={styles.container}>
+         <ListView
+           dataSource={this.state.dataSource}
+           renderRow={this.renderRow}
+           renderHeader={() => <Badge userInfo={this.props.userInfo}/>} />
+       {this.footer()}
+     </View>
+   )
+ }
+};
 
 Notes.propTypes = {
   userInfo: React.PropTypes.object.isRequired,

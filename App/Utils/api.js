@@ -17,6 +17,7 @@ var api = {
     var url = `https://githubnotetaker-15276.firebaseio.com/${username}.json`
     return fetch(url)
       .then((res) => res.json())
+      .catch((err) => console.log(err))
   },
 
   addNote(username, note) {
